@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>APIs Simples</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #111;
+    color: white;
+    text-align: center;
+}
+
+section {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #444;
+}
+
+.card {
+    background: #222;
+    margin: 10px;
+    padding: 10px;
+}
+
+img {
+    width: 100px;
+}
+</style>
+
+</head>
+<body>
+
+<h1>Site com APIs</h1>
+
+<section>
+    <h2>Rick and Morty</h2>
+    <button onclick="rm()">Carregar</button>
+    <div id="rick"></div>
+</section>
+
+<section>
+    <h2>Pokémon</h2>
+    <button onclick="poke()">Carregar</button>
+    <div id="pokemon"></div>
+</section>
+
+<section>
+    <h2>Usuários</h2>
+    <button onclick="user()">Carregar</button>
+    <div id="usuarios"></div>
+</section>
+
+<script>
+
+function rm() {
+    fetch("https://rickandmortyapi.com/api/character")
+    .then(function(res){ return res.json() })
+    .then(function(dados){
+        var div = document.getElementById("rick")
+        div.innerHTML = ""
+
+        for (var i = 0; i < 5; i++) {
+            div.innerHTML += "<div class='card'>" +
+            "<img src='" + dados.results[i].image + "'>" +
+            "<p>" + dados.results[i].name + "</p>" +
+            "</div>"
+        }
+    })
+}
+
+function poke() {
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=5")
+    .then(function(res){ return res.json() })
+    .then(function(dados){
+        var div = document.getElementById("pokemon")
+        div.innerHTML = ""
+
+        for (var i = 0; i < dados.results.length; i++) {
+
+            fetch(dados.results[i].url)
+            .then(function(res){ return res.json() })
+            .then(function(p){
+                div.innerHTML += "<div class='card'>" +
+                "<img src='" + p.sprites.front_default + "'>" +
+                "<p>" + p.name + "</p>" +
+                "</div>"
+            })
+        }
+    })
+}
+
+function user() {
+    fetch("https://randomuser.me/api/?results=5")
+    .then(function(res){ return res.json() })
+    .then(function(dados){
+        var div = document.getElementById("usuarios")
+        div.innerHTML = ""
+
+        for (var i = 0; i < dados.results.length; i++) {
+            div.innerHTML += "<div class='card'>" +
+            "<img src='" + dados.results[i].picture.medium + "'>" +
+            "<p>" + dados.results[i].name.first + "</p>" +
+            "</div>"
+        }
+    })
+}
+
+</script>
+
+</body>
+</html>
